@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Productos y Usuarios Tienda</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { color: #333; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 40px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #eee; }
+  </style>
+</head>
+<body>
+  <h1>Productos de la Tienda</h1>
+  <table id="productos-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h1>Usuarios de la Tienda</h1>
+  <table id="usuarios-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function cargarProductos() {
+      try {
+        const res = await fetch('/productos');
+        const productos = await res.json();
+
+        const tbody = document.querySelector('#productos-table tbody');
+        tbody.innerHTML = '';
+
+        productos.forEach(p => {
+          const fila = document.createElement('tr');
+          fila.innerHTML = `
+            <td>${p.Id_Producto}</td>
+            <td>${p.Nombre}</td>
+            <td>${p.Descripcion}</td>
+            <td>${p.Precio}</td>
+            <td>${p.Cantidad}</td>
+          `;
+          tbody.appendChild(fila);
+        });
+      } catch (error) {
+        console.error('Error cargando productos:', error);
+      }
+    }
+
+    async function cargarUsuarios() {
+      try {
+        const res = await fetch('/usuarios');
+        const usuarios = await res.json();
+
+        const tbody = document.querySelector('#usuarios-table tbody');
+        tbody.innerHTML = '';
+
+        usuarios.forEach(u => {
+          const fila = document.createElement('tr');
+          fila.innerHTML = `
+            <td>${u.id_usuario}</td>
+            <td>${u.nombre}</td>
+            <td>${u.email}</td>
+            <td>${u.telefono || ''}</td>
+          `;
+          tbody.appendChild(fila);
+        });
+      } catch (error) {
+        console.error('Error cargando usuarios:', error);
+      }
+    }
+
+    // Cargar ambas tablas al iniciar la página
+    cargarProductos();
+    cargarUsuarios();
+  </script>
+</body>
+</html>
